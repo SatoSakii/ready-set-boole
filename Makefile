@@ -6,8 +6,9 @@ INC			=	-Ishared
 SHARED_SRCS	=	shared/ast.cpp
 
 ex00_SRCS	=	ex00/adder.cpp
+ex01_SRCS	=	ex01/multiplier.cpp
 
-EXOS		=	ex00
+EXOS		=	ex00 ex01
 
 OBJS		=	$(foreach e,$(EXOS),$(patsubst %.cpp,$(OBJS_DIR)/%.o,$($(e)_SRCS)))
 DEPS		=	$(OBJS:.o=.d)
