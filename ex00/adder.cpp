@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include "colors.hpp"
 
-int	add(unsigned int a, unsigned int b)
+int	adder(unsigned int a, unsigned int b)
 {
 	while (b != 0)
 	{
@@ -32,7 +32,7 @@ int	main(int argc, char **argv)
 	unsigned int num1 = std::atoi(argv[1]);
 	unsigned int num2 = std::atoi(argv[2]);
 
-	std::cout << RESULT(0, add(num1, num2)) << std::endl;
+	std::cout << RESULT(0, adder(num1, num2)) << std::endl;
 
 	return (0);
 }

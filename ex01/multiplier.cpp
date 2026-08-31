@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include "colors.hpp"
 
-int	multiply(unsigned int a, unsigned int b)
+int	multiplier(unsigned int a, unsigned int b)
 {
 	int result = 0;
 
@@ -31,7 +31,7 @@ int	main(int argc, char **argv)
 	unsigned int num1 = std::atoi(argv[1]);
 	unsigned int num2 = std::atoi(argv[2]);
 
-	std::cout << RESULT(1, multiply(num1, num2)) << std::endl;
+	std::cout << RESULT(1, multiplier(num1, num2)) << std::endl;
 
 	return (0);
 }
