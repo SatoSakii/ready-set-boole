@@ -1,0 +1,5 @@
+# Ignore build directories
+.build/
+
+# Ignore exercise executables
+ex[0-9][0-9]/ex[0-9][0-9]
