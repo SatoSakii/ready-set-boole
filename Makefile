@@ -3,7 +3,6 @@ CXXFLAGS	=	-Wall -Werror -Wextra
 
 OBJS_DIR	=	.build
 INC			=	-Ishared
-SHARED_SRCS	=	shared/ast.cpp
 
 ex00_SRCS	=	ex00/adder.cpp
 ex01_SRCS	=	ex01/multiplier.cpp
