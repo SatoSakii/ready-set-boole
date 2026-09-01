@@ -17,4 +17,7 @@
 # define RESULT(n, ...) TAG(n) << " " << GREEN BOLD "✔ Result" RESET \
 	<< GRAY " → " RESET << __VA_ARGS__
 
+# define ERROR(n, ...) TAG(n) << " " << RED BOLD "✖ Error" RESET \
+	<< GRAY " → " RESET << __VA_ARGS__
+
 #endif

@@ -8,8 +8,9 @@ SHARED_SRCS	=	shared/ast.cpp
 ex00_SRCS	=	ex00/adder.cpp
 ex01_SRCS	=	ex01/multiplier.cpp
 ex02_SRCS	=	ex02/gray_code.cpp
+ex03_SRCS	=	ex03/eval_formula.cpp
 
-EXOS		=	ex00 ex01 ex02
+EXOS		=	ex00 ex01 ex02 ex03
 
 OBJS		=	$(foreach e,$(EXOS),$(patsubst %.cpp,$(OBJS_DIR)/%.o,$($(e)_SRCS)))
 DEPS		=	$(OBJS:.o=.d)
@@ -19,7 +20,9 @@ all:	$(EXOS)
 -include $(DEPS)
 
 define make_exo
-$(1): $$(patsubst %.cpp,$$(OBJS_DIR)/%.o,$$($(1)_SRCS))
+$(1): $(1)/$(1)
+
+$(1)/$(1): $$(patsubst %.cpp,$$(OBJS_DIR)/%.o,$$($(1)_SRCS))
 	@$$(CXX) $$(CXXFLAGS) $$(INC) $$^ -o $(1)/$(1)
 	@echo " $$(GREEN)$$(BOLD)$$(ITALIC)■$$(RESET)  building	$$(GREEN)$$(BOLD)$$(ITALIC)$(1)$$(RESET)"
 endef
