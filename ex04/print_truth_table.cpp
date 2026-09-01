@@ -77,6 +77,7 @@ int	main(int argc, char **argv)
 	{
 		std::string	formula = argv[1];
 		printTruthTable(formula);
+
 		return (0);
 	}
 	catch (const std::exception &e)
