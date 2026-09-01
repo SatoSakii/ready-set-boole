@@ -3,6 +3,7 @@
 # include <string>
 # include <stack>
 # include <stdexcept>
+# include <map>
 
 // Structure représentant un nœud dans l'AST
 struct Node
@@ -31,6 +32,12 @@ inline bool isUnary(char c)
 	return (c == '!');
 }
 
+// Vérifie si le caractère est une variable (A à Z)
+inline bool	isVariable(char c)
+{
+	return (c >= 'A' && c <= 'Z');
+}
+
 // Vérifie si le caractère est un opérateur binaire
 // Les opérateurs binaires sont '&', '|', '^', '>', '='
 inline bool isBinary(char c)
@@ -46,7 +53,7 @@ inline Node *buildTree(const std::string &expr)
 
 	for (char c : expr)
 	{
-		if (isOperand(c))
+		if (isOperand(c) || isVariable(c))
 			nodes.push(new Node(c));
 		else if (isUnary(c))
 		{
@@ -91,37 +98,36 @@ inline Node *buildTree(const std::string &expr)
 	return nodes.top();
 }
 
-// Évalue un nœud de l'AST de manière récursive
-inline bool evalNode(Node *node)
+// Évalue un nœud de l'AST en tenant compte des
+// valeurs des variables fournies dans la map `values`
+inline bool	evalNodeVars(Node *node, const std::map<char, bool> &values)
 {
+	if (node->symbol >= 'A' && node->symbol <= 'Z')
+		return values.at(node->symbol);
 	if (isOperand(node->symbol))
 		return node->symbol == '1';
-	else if (isUnary(node->symbol))
-		return !evalNode(node->left);
-	else if (isBinary(node->symbol))
-	{
-		bool left = evalNode(node->left);
-		bool right = evalNode(node->right);
+	if (isUnary(node->symbol))
+		return !evalNodeVars(node->left, values);
 
-		switch (node->symbol)
-		{
-			case '&': return left && right;
-			case '|': return left || right;
-			case '^': return left ^ right;
-			case '>': return !left || right;
-			case '=': return left == right;
-			default: throw std::invalid_argument("Invalid operator in expression");
-		}
+	bool	left = evalNodeVars(node->left, values);
+	bool	right = evalNodeVars(node->right, values);
+
+	switch (node->symbol)
+	{
+		case '&': return left && right;
+		case '|': return left || right;
+		case '^': return left ^ right;
+		case '>': return !left || right;
+		case '=': return left == right;
+		default: throw std::invalid_argument("Invalid operator in expression");
 	}
-	else
-		throw std::invalid_argument("Invalid character in expression");
 }
 
 // Évalue une formule booléenne représentée sous forme de chaîne de caractères
 inline bool evalFormula(const std::string &expr)
 {
 	Node *root = buildTree(expr);
-	bool result = evalNode(root);
+	bool result = evalNodeVars(root, {});
 
 	delete root;
 

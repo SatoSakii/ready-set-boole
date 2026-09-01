@@ -9,8 +9,9 @@ ex00_SRCS	=	ex00/adder.cpp
 ex01_SRCS	=	ex01/multiplier.cpp
 ex02_SRCS	=	ex02/gray_code.cpp
 ex03_SRCS	=	ex03/eval_formula.cpp
+ex04_SRCS	=	ex04/print_truth_table.cpp
 
-EXOS		=	ex00 ex01 ex02 ex03
+EXOS		=	ex00 ex01 ex02 ex03 ex04
 
 OBJS		=	$(foreach e,$(EXOS),$(patsubst %.cpp,$(OBJS_DIR)/%.o,$($(e)_SRCS)))
 DEPS		=	$(OBJS:.o=.d)
