@@ -10,8 +10,9 @@ ex02_SRCS	=	ex02/gray_code.cpp
 ex03_SRCS	=	ex03/eval_formula.cpp
 ex04_SRCS	=	ex04/print_truth_table.cpp
 ex05_SRCS	=	ex05/negation_normal_form.cpp
+ex06_SRCS	=	ex06/conjunctive_normal_form.cpp
 
-EXOS		=	ex00 ex01 ex02 ex03 ex04 ex05
+EXOS		=	ex00 ex01 ex02 ex03 ex04 ex05 ex06
 
 OBJS		=	$(foreach e,$(EXOS),$(patsubst %.cpp,$(OBJS_DIR)/%.o,$($(e)_SRCS)))
 DEPS		=	$(OBJS:.o=.d)

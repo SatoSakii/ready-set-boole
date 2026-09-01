@@ -278,6 +278,95 @@ inline Node *deleteOperator(Node *node)
 	return (node);
 }
 
+// Distribue les opérateurs OU sur les opérateurs ET dans
+// l'arbre syntaxique abstrait (AST) pour obtenir la forme normale conjonctive (CNF).
+// Exemple : (A & B) | C devient (A | C) & (B | C)
+inline Node	*distribute(Node *node)
+{
+	if (isVariable(node->symbol) || isOperand(node->symbol))
+		return (node);
+	if (isUnary(node->symbol))
+		return (node);
+
+	node->left = distribute(node->left);
+	node->right = distribute(node->right);
+
+	if (node->symbol == '|')
+	{
+		if (node->left->symbol == '&')
+		{
+			Node	*x = node->left->left;
+			Node	*y = node->left->right;
+			Node	*z = node->right;
+
+			Node	*leftOr = new Node('|');
+
+			leftOr->left = x;
+			leftOr->right = z;
+
+			Node	*rightOr = new Node('|');
+
+			rightOr->left = y;
+			rightOr->right = copyTree(z);
+
+			node->symbol = '&';
+			node->left->left = nullptr;
+			node->left->right = nullptr;
+
+			delete node->left;
+
+			node->left = leftOr;
+			node->right = rightOr;
+
+			return (distribute(node));
+		}
+		if (node->right->symbol == '&')
+		{
+			Node	*x = node->left;
+			Node	*y = node->right->left;
+			Node	*z = node->right->right;
+
+			Node	*leftOr = new Node('|');
+
+			leftOr->left = x;
+			leftOr->right = y;
+
+			Node	*rightOr = new Node('|');
+
+			rightOr->left = copyTree(x);
+			rightOr->right = z;
+
+			node->symbol = '&';
+			node->right->left = nullptr;
+			node->right->right = nullptr;
+
+			delete node->right;
+
+			node->left = leftOr;
+			node->right = rightOr;
+
+			return (distribute(node));
+		}
+	}
+	return (node);
+}
+
+// Convertit une formule logique en forme normale conjonctive (CNF).
+inline std::string	conjunctiveNormalForm(const std::string &formula)
+{
+	Node	*root = buildTree(formula);
+
+	root = deleteOperator(root);
+	root = pushNegation(root);
+	root = distribute(root);
+
+	std::string	result = treeToRPN(root);
+
+	delete root;
+
+	return (result);
+}
+
 // Convertit une formule booléenne en forme normale négative (NNF).
 inline std::string	negationNormalForm(const std::string &formula)
 {
