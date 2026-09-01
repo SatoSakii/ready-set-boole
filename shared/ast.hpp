@@ -4,6 +4,7 @@
 # include <stack>
 # include <stdexcept>
 # include <map>
+# include <vector>
 
 // Structure représentant un nœud dans l'AST
 struct Node
@@ -204,6 +205,20 @@ inline Node *pushNegation(Node *node)
 		node->right = pushNegation(node->right);
 
 	return (node);
+}
+
+// Extrait les variables uniques d'une formule booléenne
+inline std::vector<char>	extractVariables(const std::string &formula)
+{
+	std::vector<char>	variables;
+
+	for (char c = 'A'; c <= 'Z'; c++)
+	{
+		if (formula.find(c) != std::string::npos)
+			variables.push_back(c);
+	}
+
+	return (variables);
 }
 
 // Supprime les opérateurs '>' (implication), '=' (équivalence)

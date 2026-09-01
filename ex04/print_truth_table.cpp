@@ -1,21 +1,6 @@
 #include "colors.hpp"
 #include "ast.hpp"
 #include <iostream>
-#include <vector>
-
-// Extrait les variables uniques d'une formule booléenne
-std::vector<char>	extractVariables(const std::string &formula)
-{
-	std::vector<char>	variables;
-
-	for (char c = 'A'; c <= 'Z'; c++)
-	{
-		if (formula.find(c) != std::string::npos)
-			variables.push_back(c);
-	}
-
-	return (variables);
-}
 
 // Affiche l'en-tête de la table de vérité avec les variables et le résultat
 void	printHeader(const std::vector<char> &variables)
