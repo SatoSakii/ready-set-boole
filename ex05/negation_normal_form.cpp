@@ -13,7 +13,9 @@ int	main(int argc, char **argv)
 	try
 	{
 		std::string	formula = argv[1];
-		std::cout << RESULT(5, negationNormalForm(formula)) << std::endl;
+		std::string	result = negationNormalForm(formula);
+
+		std::cout << RESULT(5, result) << std::endl;
 
 		return (0);
 	}
