@@ -46,57 +46,72 @@ inline bool isBinary(char c)
 	return (c == '&' || c == '|' || c == '^' || c == '>' || c == '=');
 }
 
+inline void clearStack(std::stack<Node *> &nodes)
+{
+	while (!nodes.empty())
+	{
+		delete nodes.top();
+
+		nodes.pop();
+	}
+}
+
 // Construit un arbre syntaxique abstrait (AST)
 // à partir d'une expression booléenne en notation polonaise inversée (RPN)
 inline Node *buildTree(const std::string &expr)
 {
 	std::stack<Node *>	nodes;
 
-	for (char c : expr)
-	{
-		if (isOperand(c) || isVariable(c))
-			nodes.push(new Node(c));
-		else if (isUnary(c))
+	try {
+		for (char c : expr)
 		{
-			if (nodes.empty())
-				throw std::invalid_argument("Invalid expression");
+			if (isOperand(c) || isVariable(c))
+				nodes.push(new Node(c));
+			else if (isUnary(c))
+			{
+				if (nodes.empty())
+					throw std::invalid_argument("Invalid expression");
 
-			Node *operand = nodes.top();
+				Node *operand = nodes.top();
 
-			nodes.pop();
+				nodes.pop();
 
-			Node *node = new Node(c);
+				Node *node = new Node(c);
 
-			node->left = operand;
-			nodes.push(node);
+				node->left = operand;
+				nodes.push(node);
+			}
+			else if (isBinary(c))
+			{
+				if (nodes.size() < 2)
+					throw std::invalid_argument("Invalid expression");
+
+				Node *right = nodes.top();
+
+				nodes.pop();
+
+				Node *left = nodes.top();
+
+				nodes.pop();
+
+				Node *node = new Node(c);
+
+				node->left = left;
+				node->right = right;
+				nodes.push(node);
+			}
+			else
+				throw std::invalid_argument("Invalid character in expression");
 		}
-		else if (isBinary(c))
-		{
-			if (nodes.size() < 2)
-				throw std::invalid_argument("Invalid expression");
 
-			Node *right = nodes.top();
+		if (nodes.size() != 1)
+			throw std::invalid_argument("Invalid expression");
 
-			nodes.pop();
-
-			Node *left = nodes.top();
-
-			nodes.pop();
-
-			Node *node = new Node(c);
-
-			node->left = left;
-			node->right = right;
-			nodes.push(node);
-		}
-		else
-			throw std::invalid_argument("Invalid character in expression");
+		return (nodes.top());
+	} catch (...) {
+		clearStack(nodes);
+		throw;
 	}
-
-	if (nodes.size() != 1)
-		throw std::invalid_argument("Invalid expression");
-
-	return (nodes.top());
 }
 
 // Évalue un nœud de l'AST en tenant compte des
@@ -128,11 +143,17 @@ inline bool	evalNodeVars(Node *node, const std::map<char, bool> &values)
 inline bool evalFormula(const std::string &expr)
 {
 	Node *root = buildTree(expr);
-	bool result = evalNodeVars(root, {});
 
-	delete root;
+	try {
+		bool result = evalNodeVars(root, {});
 
-	return (result);
+		delete root;
+
+		return (result);
+	} catch (...) {
+		delete root;
+		throw;
+	}
 }
 
 // Convertit un arbre syntaxique abstrait (AST) en notation polonaise inversée (RPN)
@@ -176,7 +197,12 @@ inline Node *pushNegation(Node *node)
 			Node *tmp = child->left;
 
 			child->left = nullptr;
+
 			delete child;
+
+			node->left = nullptr;
+
+			delete node;
 
 			return (pushNegation(tmp));
 		}
