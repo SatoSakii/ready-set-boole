@@ -29,6 +29,12 @@ all:	$(EXOS)
 test:	all
 	@bash $(TESTS)
 
+test-verbose:	all
+	@bash $(TESTS) -v
+
+test-leaks:	all
+	@bash $(TESTS) --leaks
+
 -include $(DEPS)
 
 define make_exo
@@ -54,7 +60,7 @@ fclean:	clean
 
 re:	fclean all
 
-.PHONY: all clean fclean re $(EXOS)
+.PHONY: all clean fclean re $(EXOS) test test-verbose test-leaks
 
 RED			=	\033[31m
 GREEN		=	\033[32m
