@@ -1,6 +1,7 @@
 #include "colors.hpp"
 #include <iostream>
 #include <cstdint>
+#include <iomanip>
 
 // Mappe deux entiers non signés de 16 bits sur un
 // nombre à virgule flottante entre 0 et 1 en utilisant l'interleaving des bits.
@@ -29,7 +30,8 @@ int	main(int argc, char **argv)
 	uint16_t	x = std::strtoul(argv[1], nullptr, 10);
 	uint16_t	y = std::strtoul(argv[2], nullptr, 10);
 
-	std::cout << RESULT(10, map(x, y)) << std::endl;
+	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10)
+		<< RESULT(10, map(x, y)) << std::endl;
 
 	return (0);
 }

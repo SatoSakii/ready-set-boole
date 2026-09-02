@@ -8,7 +8,7 @@
 // les deux entiers non signés de 16 bits correspondants en désintercalant les bits.
 std::pair<uint16_t, uint16_t>	reverse_map(double n)
 {
-	uint32_t	value = (uint32_t)(n * (double)UINT32_MAX);
+	uint32_t	value = (uint32_t)std::llround(n * (double)UINT32_MAX);
 	uint16_t	x = 0;
 	uint16_t	y = 0;
 
