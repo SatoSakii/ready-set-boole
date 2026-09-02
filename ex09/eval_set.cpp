@@ -19,6 +19,8 @@ std::set<int>	buildUniverse(const std::vector<std::vector<int> > &sets)
 // Évalue un nœud de l'arbre syntaxique pour un ensemble de sous-ensembles d'entiers.
 std::set<int>	evalNodeSet(Node *node, const std::vector<std::vector<int> > &sets, const std::set<int> &universe)
 {
+	if (isOperand(node->symbol))
+		throw std::invalid_argument("Operands are not allowed, run NNF first");
 	if (isVariable(node->symbol))
 	{
 		std::size_t		index = node->symbol - 'A';
@@ -70,11 +72,17 @@ std::vector<int>	eval_set(const std::string &formula, const std::vector<std::vec
 	std::string		nnf = negationNormalForm(formula);
 	Node			*root = buildTree(nnf);
 	std::set<int>	universe = buildUniverse(sets);
-	std::set<int>	resultSet = evalNodeSet(root, sets, universe);
 
-	delete root;
+	try {
+		std::set<int>	resultSet = evalNodeSet(root, sets, universe);
 
-	return (std::vector<int>(resultSet.begin(), resultSet.end()));
+		delete root;
+
+		return (std::vector<int>(resultSet.begin(), resultSet.end()));
+	} catch (...) {
+		delete root;
+		throw;
+	}
 }
 
 // Affiche un ensemble d'entiers sous forme de liste entre crochets.
