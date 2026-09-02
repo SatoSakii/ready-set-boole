@@ -4,6 +4,8 @@ CXXFLAGS	=	-Wall -Werror -Wextra
 OBJS_DIR	=	.build
 INC			=	-Ishared
 
+TESTS		=	tests/run_tests.sh
+
 ex00_SRCS	=	ex00/adder.cpp
 ex01_SRCS	=	ex01/multiplier.cpp
 ex02_SRCS	=	ex02/gray_code.cpp
@@ -13,13 +15,19 @@ ex05_SRCS	=	ex05/negation_normal_form.cpp
 ex06_SRCS	=	ex06/conjunctive_normal_form.cpp
 ex07_SRCS	=	ex07/sat.cpp
 ex08_SRCS	=	ex08/powerset.cpp
+ex09_SRCS	=	ex09/eval_set.cpp
+ex10_SRCS	=	ex10/map.cpp
+ex11_SRCS	=	ex11/reverse_map.cpp
 
-EXOS		=	ex00 ex01 ex02 ex03 ex04 ex05 ex06 ex07 ex08
+EXOS		=	ex00 ex01 ex02 ex03 ex04 ex05 ex06 ex07 ex08 ex09 ex10 ex11
 
 OBJS		=	$(foreach e,$(EXOS),$(patsubst %.cpp,$(OBJS_DIR)/%.o,$($(e)_SRCS)))
 DEPS		=	$(OBJS:.o=.d)
 
 all:	$(EXOS)
+
+test:	all
+	@bash $(TESTS)
 
 -include $(DEPS)
 
