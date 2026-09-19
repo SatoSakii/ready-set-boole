@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdint>
 #include <iomanip>
+#include <limits>
 
 // Mappe deux entiers non signés de 16 bits sur un
 // nombre à virgule flottante entre 0 et 1 en utilisant l'interleaving des bits.
